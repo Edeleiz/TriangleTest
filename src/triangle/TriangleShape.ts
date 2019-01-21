@@ -2,14 +2,8 @@ import { isError } from "util";
 import { TriangleType } from "./enum"
 import { BaseShape } from "./BaseShape";
 
-//TODO как обрабатывать ошибки, если в конструктор передается число <=0?
-//TODO конструктор, который принимает объект имплементирующий интерфейс ITriangle
-//TODO a,b,c наверное должны быть приватными, чтобы их не выставили в <=0?
-//TODO так как a,b,c не инты, их нельзя сравнивать через ===, надо учитывать погрешность...
-//test
-
 export class TriangleShape extends BaseShape<TriangleType>{
-    constructor(private a: number, private b: number, private c: number) { 
+    constructor(private _a: number, private _b: number, private _c: number) { 
         super();
         
         this.addTypeCheck(this.isInvalid.bind(this), TriangleType.INVALID);
@@ -17,13 +11,13 @@ export class TriangleShape extends BaseShape<TriangleType>{
         this.addTypeCheck(this.isIsosceles.bind(this), TriangleType.ISOSCELES);
         this.addTypeCheck(this.isScalene.bind(this), TriangleType.SCALENE);
 
-        this.setValues(a, b, c);
+        this.setValues(_a, _b, _c);
     }
 
     public setValues(a:number, b:number, c:number): void {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this._a = a;
+        this._b = b;
+        this._c = c;
 
         this.commitValues();
     }
@@ -33,28 +27,28 @@ export class TriangleShape extends BaseShape<TriangleType>{
     }
 
     private isInvalidSides(): boolean {
-        return this.a <= 0 || this.b <= 0 || this.c <= 0
+        return this._a <= 0 || this._b <= 0 || this._c <= 0
     }
 
     private isImpossible(): boolean {
-        return this.a >= this.b + this.c ||
-            this.c >= this.b + this.a ||
-            this.b >= this.a + this.c
+        return this._a >= this._b + this._c ||
+            this._c >= this._b + this._a ||
+            this._b >= this._a + this._c
     }
 
     private isEquilateral(): boolean {
-        return this.a === this.b && this.b === this.c;
+        return this._a === this._b && this._b === this._c;
     }
 
     private isScalene(): boolean {
-        return this.a !== this.b && this.b !== this.c;
+        return this._a !== this._b && this._b !== this._c;
     }
 
     private isIsosceles(): boolean {
         return (
-            (this.a === this.b && this.c !== this.a) ||
-            (this.b === this.c && this.a !== this.b) ||
-            (this.c === this.a && this.b !== this.c)
+            (this._a === this._b && this._c !== this._a) ||
+            (this._b === this._c && this._a !== this._b) ||
+            (this._c === this._a && this._b !== this._c)
         );
     }
 }
